@@ -3,65 +3,124 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:WorkTableSimulator"
+        xmlns:local="clr-namespace:WorkTableSimulator" xmlns:i="http://schemas.microsoft.com/xaml/behaviors"
         mc:Ignorable="d"
-        Title="MainWindow" Height="547" Width="652">
+        Title="WorkPlateSimulator" Height="768" Width="1024">
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type ItemsControl}">
+                <Setter Property="ItemsPanel">
+                    <Setter.Value>
+                        <ItemsPanelTemplate>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                            </Grid>
+                        </ItemsPanelTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <Style TargetType="{x:Type Rectangle}">
+                <Setter Property="Opacity">
+                    <Setter.Value>0.5</Setter.Value>
+                </Setter>
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="4*"></ColumnDefinition>
+            <ColumnDefinition Width="5*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Grid Grid.Column="0" Background="Silver">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"></ColumnDefinition>
-                <ColumnDefinition Width="1*"></ColumnDefinition>
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-                <RowDefinition Height="1*"></RowDefinition>
-
-                <RowDefinition Height="10*"></RowDefinition>
-            </Grid.RowDefinitions>
-            <!--x axis-->
-            <Label Grid.Column="0" Grid.Row="0" Content="X current pose:"></Label>
-            <Label Grid.Column="1" Grid.Row="0" Content="0" Name="xCurrPose" HorizontalAlignment="Right"></Label>
-            <Label Grid.Column="0" Grid.Row="1" Content="X min pose:"></Label>
-            <Label Grid.Column="1" Grid.Row="1" Content="0" Name="xMinPose" HorizontalAlignment="Right"></Label>
-            <Label Grid.Column="0" Grid.Row="2" Content="X max pose:"></Label>
-            <Label Grid.Column="1" Grid.Row="2" Content="0" Name="xMaxPose" HorizontalAlignment="Right"></Label>
-            <!--y axis-->
-            <Label Grid.Column="0" Grid.Row="4" Content="Y current pose:"></Label>
-            <Label Grid.Column="1" Grid.Row="4" Content="0" Name="yCurrPose" HorizontalAlignment="Right"></Label>
-            <Label Grid.Column="0" Grid.Row="5" Content="Y min pose:"></Label>
-            <Label Grid.Column="1" Grid.Row="5" Content="0" Name="yMinPose" HorizontalAlignment="Right"></Label>
-            <Label Grid.Column="0" Grid.Row="6" Content="Y max pose:"></Label>
-            <Label Grid.Column="1" Grid.Row="6" Content="0" Name="yMaxPose" HorizontalAlignment="Right"></Label>
-            <!--z axis-->
-            <Label Grid.Column="0" Grid.Row="8" Content="Z current pose:"></Label>
-            <Label Grid.Column="1" Grid.Row="8" Content="0" Name="zCurrPose" HorizontalAlignment="Right"></Label>
-            <Label Grid.Column="0" Grid.Row="9" Content="Z min pose:"></Label>
-            <Label Grid.Column="1" Grid.Row="9" Content="0" Name="zMinPose" HorizontalAlignment="Right"></Label>
-            <Label Grid.Column="0" Grid.Row="10" Content="Z max pose:"></Label>
-            <Label Grid.Column="1" Grid.Row="10" Content="0" Name="zMaxPose" HorizontalAlignment="Right"></Label>
-        </Grid>
-        <Canvas Grid.Column="1">
-            <Canvas Name="workZone" Canvas.Left="10" Canvas.Top="10" Width="502" Height="511" Background="DarkGray" HorizontalAlignment="Left" VerticalAlignment="Top">
-
-            </Canvas>
-
+        <StackPanel Background="#FFB2C3C5">
+            <!--X Axis-->
+            <ItemsControl>
+                <Label Content="X Axis"></Label>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Min pose:"></TextBlock>
+                <TextBlock Text="{Binding Axes[0].XMinPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Max pose:"></TextBlock>
+                <TextBlock Text="{Binding Axes[0].XMaxPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Current pose:"></TextBlock>
+                <TextBlock Text="{Binding Axes[0].XCurrPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Motor Speed:"></TextBlock>
+                <TextBlock Text="{Binding Motors[0].Speed, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <!--Y Axis-->
+            <ItemsControl>
+                <Label Content="Y Axis"></Label>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Min pose:"></TextBlock>
+                <TextBlock Text="{Binding Axes[1].XMinPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Max pose:"></TextBlock>
+                <TextBlock Text="{Binding Axes[1].XMaxPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Current pose:"></TextBlock>
+                <TextBlock Text="{Binding Axes[1].XCurrPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Motor Speed:"></TextBlock>
+                <TextBlock Text="{Binding Motors[1].Speed, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <!--Z Axis-->
+            <ItemsControl>
+                <Label Content="Z Axis"></Label>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Min pose:"></TextBlock>
+                <TextBlock Text="{Binding Axes[2].XMinPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Max pose:"></TextBlock>
+                <TextBlock Text="{Binding Axes[2].XMaxPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Current pose:"></TextBlock>
+                <TextBlock Text="{Binding Axes[2].XCurrPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Motor Speed:"></TextBlock>
+                <TextBlock Text="{Binding Motors[2].Speed, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <!--Plate-->
+            <ItemsControl>
+                <Label Content="Plate"></Label>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Current pose:"></TextBlock>
+                <TextBlock Text="{Binding Plates[0].CurrentPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Target pose:"></TextBlock>
+                <TextBlock Text="{Binding Plates[0].TargetPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+            </ItemsControl>
+        </StackPanel>
+        <Canvas Grid.Column="1" x:Name="workZone" Canvas.Left="100" Canvas.Top="100"  Background="DarkGray">
+            <i:Interaction.Triggers>
+                <i:EventTrigger EventName="MouseDown">
+                    <i:InvokeCommandAction Command="{Binding MouseDownCommand}" CommandParameter="{Binding ElementName=workZone}"/>
+                </i:EventTrigger>
+            </i:Interaction.Triggers>
+            <Canvas.LayoutTransform>
+                <ScaleTransform ScaleX="1" ScaleY="1"/>
+            </Canvas.LayoutTransform>
+            <Rectangle x:Name="xAxis" Fill="Red"    Canvas.Left="{Binding XAxisX}" Canvas.Top="{Binding XAxisY}" Width="{Binding XAxisWidth}" Height="{Binding XAxisHeight}" ></Rectangle>
+            <Rectangle x:Name="yAxis" Fill="Green"  Canvas.Left="{Binding YAxisX}" Canvas.Top="{Binding YAxisY}" Width="{Binding YAxisWidth}" Height="{Binding YAxisHeight}" ></Rectangle>
+            <Rectangle x:Name="zAxis" Fill="Blue"   Canvas.Left="{Binding ZAxisX}" Canvas.Top="{Binding ZAxisY}" Width="{Binding ZAxisWidth}" Height="{Binding ZAxisHeight}" ></Rectangle>
+            <Rectangle x:Name="plate" Fill="Black"  Canvas.Left="{Binding PlateX}" Canvas.Top="{Binding PlateY}" Width="{Binding PlateWidth}" Height="{Binding PlateHeight}" ></Rectangle>
         </Canvas>
     </Grid>
-
-
-
-
 </Window>
