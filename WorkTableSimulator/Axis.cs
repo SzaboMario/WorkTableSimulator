@@ -1,103 +1,83 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace WorkTableSimulator
+﻿namespace WorkTableSimulator
 {
     internal class Axis : ChangeNotifier
     {
+        private AxisType _AxisName;
+        private int _MinPose;
+        private int _MaxPose;
+        private int _CurrPose;
+        private double _X;
+        private double _Y;
+        private double _Width;
+        private double _Height;
+
+        //private int _YMinPose;
+        //private int _YMaxPose;
+        //private int _YCurrPose;
+        //private uint _YAxisX;
+        //private uint _YAxisY;
+        //private uint _YAxisWidth;
+        //private uint _YAxisHeight;
+
+        //private int _ZMinPose;
+        //private int _ZMaxPose;
+        //private int _ZCurrPose;
+        //private uint _ZAxisX;
+        //private uint _ZAxisY;
+        //private uint _ZAxisWidth;
+        //private uint _ZAxisHeight;
+
         //X
-        private Rectangle _XRectangle;
-        public Rectangle XRectangle
+        public AxisType AxisName
         {
-            get { return _XRectangle; }
-            set { _XRectangle = value; OnPropertyChanged(nameof(XRectangle)); }
+            get { return _AxisName; }
+            set { _AxisName = value; OnPropertyChanged(nameof(AxisName)); }
         }
 
-        private int _XMinPose;
-        public int XMinPose
+        public int MinPose
         {
-            get { return _XMinPose; }
-            set { _XMinPose = value; OnPropertyChanged(nameof(XMinPose)); }
+            get { return _MinPose; }
+            set { _MinPose = value; OnPropertyChanged(nameof(MinPose)); }
+        }
+        
+        public int MaxPose
+        {
+            get { return _MaxPose; }
+            set { _MaxPose = value; OnPropertyChanged(nameof(MaxPose)); }
+        }
+        
+        public int CurrPose
+        {
+            get { return _CurrPose; }
+            set { _CurrPose = value; OnPropertyChanged(nameof(CurrPose)); }
         }
 
-        private int _XMaxPose;
-        public int XMaxPose
+        public double X
         {
-            get { return _XMaxPose; }
-            set { _XMaxPose = value; OnPropertyChanged(nameof(XMaxPose)); }
+            get { return _X; }
+            set { _X = value; OnPropertyChanged(nameof(X)); }
         }
 
-        private int _XCurrPose;
-        public int XCurrPose
+        public double Y
         {
-            get { return _XCurrPose; }
-            set { _XCurrPose = value; OnPropertyChanged(nameof(XCurrPose)); }
+            get { return _Y; }
+            set { _Y = value; OnPropertyChanged(nameof(Y)); }
         }
 
-
-        //Y
-        private Rectangle _YRectangle;
-        public Rectangle YRectangle
+        public double Width
         {
-            get { return _YRectangle; }
-            set { _YRectangle = value; OnPropertyChanged(nameof(YRectangle)); }
+            get { return _Width; }
+            set { _Width = value; OnPropertyChanged(nameof(Width)); }
         }
 
-        private int _YMinPose;
-        public int YMinPose
+        public double Height
         {
-            get { return _YMinPose; }
-            set { _YMinPose = value; OnPropertyChanged(nameof(YMinPose)); }
-        }
-
-        private int _YMaxPose;
-        public int YMaxPose
-        {
-            get { return _YMaxPose; }
-            set { _YMaxPose = value; OnPropertyChanged(nameof(YMaxPose)); }
-        }
-
-        private int _YCurrPose;
-        public int YCurrPose
-        {
-            get { return _YCurrPose; }
-            set { _YCurrPose = value; OnPropertyChanged(nameof(YCurrPose)); }
-        }
-
-
-        //Z
-        private Rectangle _ZRectangle;
-        public Rectangle ZRectangle
-        {
-            get { return _ZRectangle; }
-            set { _ZRectangle = value; OnPropertyChanged(nameof(ZRectangle)); }
-        }
-
-        private int _ZMinPose;
-        public int ZMinPose
-        {
-            get { return _ZMinPose; }
-            set { _ZMinPose = value; OnPropertyChanged(nameof(ZMinPose)); }
-        }
-
-        private int _ZMaxPose;
-        public int ZMaxPose
-        {
-            get { return _ZMaxPose; }
-            set { _ZMaxPose = value; OnPropertyChanged(nameof(ZMaxPose)); }
-        }
-
-        private int _ZCurrPose;
-        public int ZCurrPose
-        {
-            get { return _ZCurrPose; }
-            set { _ZCurrPose = value; OnPropertyChanged(nameof(ZCurrPose)); }
+            get { return _Height; }
+            set { _Height = value; OnPropertyChanged(nameof(Height)); }
         }
 
         public Axis() { }
+
+
     }
 }

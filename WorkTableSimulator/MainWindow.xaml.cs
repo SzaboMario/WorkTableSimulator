@@ -10,13 +10,7 @@ namespace WorkTableSimulator
         public MainWindow()
         {
             InitializeComponent();
-            this.DataContext = new MainVM();
-            
-        }
-
-        private void workZone_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
-        {
-
+            this.DataContext = new MainVM();        
         }
     }
 }

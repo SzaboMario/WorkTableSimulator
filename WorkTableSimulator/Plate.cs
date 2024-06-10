@@ -1,26 +1,52 @@
-﻿
-using System.Windows.Shapes;
-
-namespace WorkTableSimulator
+﻿namespace WorkTableSimulator
 {
     internal class Plate : ChangeNotifier
     {
         //Plate
-        private Rectangle _PlateRectangle;
-        public Rectangle PlateRectangle
+        private AxisType _PlateName;
+        private double _X;
+        private double _Y;
+        private double _Width;
+        private double _Height;
+        private int _TargetPose;
+        private int _CurrentPose;
+
+        public AxisType PlateName
         {
-            get { return _PlateRectangle; }
-            set { _PlateRectangle = value; OnPropertyChanged(nameof(PlateRectangle)); }
+            get { return _PlateName; }
+            set { _PlateName = value; OnPropertyChanged(nameof(PlateName)); }
         }
 
-        private int _TargetPose;
+        public double X
+        {
+            get { return _X; }
+            set { _X = value; OnPropertyChanged(nameof(X)); }
+        }
+
+        public double Y
+        {
+            get { return _Y; }
+            set { _Y = value; OnPropertyChanged(nameof(Y)); }
+        }
+        public double Width
+        {
+            get { return _Width; }
+            set { _Width = value; OnPropertyChanged(nameof(Width)); }
+        }
+
+        public double Height
+        {
+            get { return _Height; }
+            set { _Height = value; OnPropertyChanged(nameof(Height)); }
+        }
+
+        
         public int TargetPose
         {
             get { return _TargetPose; }
             set { _TargetPose = value; OnPropertyChanged(nameof(TargetPose)); }
         }
-
-        private int _CurrentPose;
+    
         public int CurrentPose
         {
             get { return _CurrentPose; }
@@ -28,5 +54,7 @@ namespace WorkTableSimulator
         }
 
         public Plate() { }
+
+
     }
 }

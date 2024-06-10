@@ -41,19 +41,19 @@
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Min pose:"></TextBlock>
-                <TextBlock Text="{Binding Axes[0].XMinPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding XAxis.MinPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"  ></TextBlock>
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Max pose:"></TextBlock>
-                <TextBlock Text="{Binding Axes[0].XMaxPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding XAxis.MaxPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Current pose:"></TextBlock>
-                <TextBlock Text="{Binding Axes[0].XCurrPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding XAxis.CurrPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Motor Speed:"></TextBlock>
-                <TextBlock Text="{Binding Motors[0].Speed, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding XMotor.Speed, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <!--Y Axis-->
             <ItemsControl>
@@ -61,19 +61,19 @@
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Min pose:"></TextBlock>
-                <TextBlock Text="{Binding Axes[1].XMinPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding YAxis.MinPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Max pose:"></TextBlock>
-                <TextBlock Text="{Binding Axes[1].XMaxPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding YAxis.MaxPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Current pose:"></TextBlock>
-                <TextBlock Text="{Binding Axes[1].XCurrPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding YAxis.CurrPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Motor Speed:"></TextBlock>
-                <TextBlock Text="{Binding Motors[1].Speed, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding YMotor.Speed, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <!--Z Axis-->
             <ItemsControl>
@@ -81,19 +81,19 @@
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Min pose:"></TextBlock>
-                <TextBlock Text="{Binding Axes[2].XMinPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding ZAxis.MinPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Max pose:"></TextBlock>
-                <TextBlock Text="{Binding Axes[2].XMaxPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding ZAxis.MaxPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Current pose:"></TextBlock>
-                <TextBlock Text="{Binding Axes[2].XCurrPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding ZAxis.CurrPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Motor Speed:"></TextBlock>
-                <TextBlock Text="{Binding Motors[2].Speed, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding ZMotor.Speed, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <!--Plate-->
             <ItemsControl>
@@ -101,11 +101,11 @@
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Current pose:"></TextBlock>
-                <TextBlock Text="{Binding Plates[0].CurrentPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding MainPlate.CurrentPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
             <ItemsControl>
                 <TextBlock Text="Target pose:"></TextBlock>
-                <TextBlock Text="{Binding Plates[0].TargetPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1"></TextBlock>
+                <TextBlock Text="{Binding MainPlate.TargetPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
         </StackPanel>
         <Canvas Grid.Column="1" x:Name="workZone" Canvas.Left="100" Canvas.Top="100"  Background="DarkGray">
@@ -117,10 +117,10 @@
             <Canvas.LayoutTransform>
                 <ScaleTransform ScaleX="1" ScaleY="1"/>
             </Canvas.LayoutTransform>
-            <Rectangle x:Name="xAxis" Fill="Red"    Canvas.Left="{Binding XAxisX}" Canvas.Top="{Binding XAxisY}" Width="{Binding XAxisWidth}" Height="{Binding XAxisHeight}" ></Rectangle>
-            <Rectangle x:Name="yAxis" Fill="Green"  Canvas.Left="{Binding YAxisX}" Canvas.Top="{Binding YAxisY}" Width="{Binding YAxisWidth}" Height="{Binding YAxisHeight}" ></Rectangle>
-            <Rectangle x:Name="zAxis" Fill="Blue"   Canvas.Left="{Binding ZAxisX}" Canvas.Top="{Binding ZAxisY}" Width="{Binding ZAxisWidth}" Height="{Binding ZAxisHeight}" ></Rectangle>
-            <Rectangle x:Name="plate" Fill="Black"  Canvas.Left="{Binding PlateX}" Canvas.Top="{Binding PlateY}" Width="{Binding PlateWidth}" Height="{Binding PlateHeight}" ></Rectangle>
+            <Rectangle x:Name="xAxis" Fill="Red"    Canvas.Left="{Binding XAxis.X}" Canvas.Top="{Binding XAxis.Y}" Width="{Binding XAxis.Width}" Height="{Binding XAxis.Height}" ></Rectangle>
+            <Rectangle x:Name="yAxis" Fill="Green"  Canvas.Left="{Binding YAxis.X}" Canvas.Top="{Binding YAxis.Y}" Width="{Binding YAxis.Width}" Height="{Binding YAxis.Height}" ></Rectangle>
+            <Rectangle x:Name="zAxis" Fill="Blue"   Canvas.Left="{Binding ZAxis.X}" Canvas.Top="{Binding ZAxis.Y}" Width="{Binding ZAxis.Width}" Height="{Binding ZAxis.Height}" ></Rectangle>
+            <Rectangle x:Name="plate" Fill="Black"  Canvas.Left="{Binding MainPlate.X}" Canvas.Top="{Binding MainPlate.Y}" Width="{Binding MainPlate.Width}" Height="{Binding MainPlate.Height}" ></Rectangle>
         </Canvas>
     </Grid>
 </Window>

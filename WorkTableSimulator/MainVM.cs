@@ -1,5 +1,4 @@
 ﻿using System.Collections.ObjectModel;
-using System.Drawing;
 using System.Windows.Controls;
 using System.Windows.Input;
 
@@ -9,26 +8,13 @@ namespace WorkTableSimulator
     internal class MainVM : ChangeNotifier
     {
         #region Fields
-        private Axis _Axis;
-        private Plate _Plate;
-        private Motor _Motor;
-
-        private uint _XAxisX;
-        private uint _XAxisY;
-        private uint _XAxisWidth;
-        private uint _XAxisHeight;
-        private uint _YAxisX;
-        private uint _YAxisY;
-        private uint _YAxisWidth;
-        private uint _YAxisHeight;
-        private uint _ZAxisX;
-        private uint _ZAxisY;
-        private uint _ZAxisWidth;
-        private uint _ZAxisHeight;
-        private uint _PlateX;
-        private uint _PlateY;
-        private uint _PlateWidth;
-        private uint _PlateHeight;
+        private Axis _XAxis;
+        private Axis _YAxis;
+        private Axis _ZAxis;
+        private Motor _XMotor;
+        private Motor _YMotor;
+        private Motor _ZMotor;
+        private Plate _MainPlate;
 
         private ObservableCollection<Axis> _Axes;
         private ObservableCollection<Plate> _Plates;
@@ -36,107 +22,43 @@ namespace WorkTableSimulator
         #endregion Fields
 
         #region Properties
-        public Axis Axis
+        public Axis XAxis
         {
-            get { return _Axis; }
-            set { _Axis = value; OnPropertyChanged(nameof(Axis)); }
+            get { return _XAxis; }
+            set { _XAxis = value; OnPropertyChanged(nameof(XAxis)); }
         }
-        public Plate Plate
+        public Axis YAxis
         {
-            get { return _Plate; }
-            set { _Plate = value; OnPropertyChanged(nameof(Plate)); }
+            get { return _YAxis; }
+            set { _YAxis = value; OnPropertyChanged(nameof(YAxis)); }
         }
-        public Motor Motor
+        public Axis ZAxis
         {
-            get { return _Motor; }
-            set { _Motor = value; OnPropertyChanged(nameof(Motor)); }
+            get { return _ZAxis; }
+            set { _ZAxis = value; OnPropertyChanged(nameof(ZAxis)); }
         }
-
-        public uint XAxisX
+        public Motor XMotor
         {
-            get { return _XAxisX; }
-            set { _XAxisX = value; OnPropertyChanged(nameof(XAxisX)); }
+            get { return _XMotor; }
+            set { _XMotor = value; OnPropertyChanged(nameof(XMotor)); }
         }
-        public uint XAxisY
+        public Motor YMotor
         {
-            get { return _XAxisY; }
-            set { _XAxisY = value; OnPropertyChanged(nameof(XAxisY)); }
+            get { return _YMotor; }
+            set { _YMotor = value; OnPropertyChanged(nameof(YMotor)); }
         }
-        public uint XAxisWidth
+        public Motor ZMotor
         {
-            get { return _XAxisWidth; }
-            set { _XAxisWidth = value; OnPropertyChanged(nameof(XAxisWidth)); }
+            get { return _ZMotor; }
+            set { _ZMotor = value; OnPropertyChanged(nameof(ZMotor)); }
         }
-        public uint XAxisHeight
+        public Plate MainPlate
         {
-            get { return _XAxisHeight; }
-            set { _XAxisHeight = value; OnPropertyChanged(nameof(XAxisHeight)); }
-        }
-
-        public uint YAxisX
-        {
-            get { return _YAxisX; }
-            set { _YAxisX = value; OnPropertyChanged(nameof(YAxisX)); }
-        }
-        public uint YAxisY
-        {
-            get { return _YAxisY; }
-            set { _YAxisY = value; OnPropertyChanged(nameof(YAxisY)); }
-        }
-        public uint YAxisWidth
-        {
-            get { return _YAxisWidth; }
-            set { _YAxisWidth = value; OnPropertyChanged(nameof(YAxisWidth)); }
-        }
-        public uint YAxisHeight
-        {
-            get { return _YAxisHeight; }
-            set { _YAxisHeight = value; OnPropertyChanged(nameof(YAxisHeight)); }
+            get { return _MainPlate; }
+            set { _MainPlate = value; OnPropertyChanged(nameof(MainPlate)); }
         }
 
-        public uint ZAxisX
-        {
-            get { return _ZAxisX; }
-            set { _ZAxisX = value; OnPropertyChanged(nameof(ZAxisX)); }
-        }
-        public uint ZAxisY
-        {
-            get { return _ZAxisY; }
-            set { _ZAxisY = value; OnPropertyChanged(nameof(ZAxisY)); }
-        }
-        public uint ZAxisWidth
-        {
-            get { return _YAxisWidth; }
-            set { _ZAxisWidth = value; OnPropertyChanged(nameof(ZAxisWidth)); }
-        }
-        public uint ZAxisHeight
-        {
-            get { return _ZAxisHeight; }
-            set { _ZAxisHeight = value; OnPropertyChanged(nameof(ZAxisHeight)); }
-        }
-
-        public uint PlateX
-        {
-            get { return _PlateX; }
-            set { _PlateX = value; OnPropertyChanged(nameof(PlateX)); }
-        }
-        public uint PlateY
-        {
-            get { return _PlateY; }
-            set { _PlateY = value; OnPropertyChanged(nameof(PlateY)); }
-        }
-        public uint PlateWidth
-        {
-            get { return _PlateWidth; }
-            set { _PlateWidth = value; OnPropertyChanged(nameof(PlateWidth)); }
-        }
-        public uint PlateHeight
-        {
-            get { return _PlateHeight; }
-            set { _PlateHeight = value; OnPropertyChanged(nameof(PlateHeight)); }
-        }
-
-        
+        public ICommand MouseDownCommand { get; set; }
 
         public ObservableCollection<Axis> Axes { get => _Axes; set => _Axes = value; }       
         public ObservableCollection<Plate> Plates { get => _Plates; set => _Plates = value; }    
@@ -146,140 +68,217 @@ namespace WorkTableSimulator
         #region Constructor
         public MainVM()
         {
-            _InitAxes();
-            _InitPlates();
-            _InitMotors();
-            _InitdrawableObjects();
+            InitAxes();
+            InitPlates();
+            InitMotors();
             MouseDownCommand = new RelayCommand(ExecuteMouseDown);
         }
         #endregion Constructor
 
         #region Public Methods
-        public void AddAxis()
-        {
-            Axes.Add(Axis);
-        }
 
-        public void AddPlate()
-        {
-            Plates.Add(Plate);
-        }
-
-        public void AddMotor()
-        {
-            Motors.Add(Motor);
-        }
         #endregion Public Methods
 
         #region Private Methods
-        private void _InitAxes()
+        private void AddAxis(Axis axis)
+        {
+            Axes.Add(axis);
+        }
+
+        private void AddPlate(Plate plate)
+        {
+            Plates.Add(plate);
+        }
+
+        private void AddMotor(Motor motor)
+        {
+            Motors.Add(motor);
+        }
+
+        private void InitAxes()
         {
             Axes = [];
-            Axis = new Axis
+            XAxis = new Axis
             {
-                XRectangle = new Rectangle(),
-                XMinPose = 0,
-                XMaxPose = 100,
-                XCurrPose = 0
+                AxisName = AxisType.X,
+                X = 200,
+                Y = 350,
+                Width = 500,
+                Height = 10,
+                MinPose = 0,
+                MaxPose = 100,
+                CurrPose = 0
             };
-            AddAxis();
+            AddAxis(XAxis);
 
-            Axis = new Axis
+            YAxis = new Axis
             {
-                YRectangle = new Rectangle(),
-                YMinPose = 0,
-                YMaxPose = 100,
-                YCurrPose = 0
+                AxisName = AxisType.Y,
+                X = 200,
+                Y = 100,
+                Width = 10,
+                Height = 500,
+                MinPose = 0,
+                MaxPose = 100,
+                CurrPose = 0
             };
-            AddAxis();
+            AddAxis(YAxis);
 
-            Axis = new Axis
+            ZAxis = new Axis
             {
-                ZRectangle = new Rectangle(),
-                ZMinPose = 0,
-                ZMaxPose = 100,
-                ZCurrPose = 0
+                AxisName = AxisType.Z,
+                X = 200,
+                Y = 100,
+                Width = 10,
+                Height = 10,
+                MinPose = 0,
+                MaxPose = 100,
+                CurrPose = 0
             };
-            AddAxis();
-        }
-        private void _InitPlates()
-        {
-            Plates = new ObservableCollection<Plate>();
-            Plate= new Plate();
-            for (int i = 0; i < 1; i++)
-            {
-                Plate.CurrentPose = 0;
-                AddPlate();
-            }
-        }
-
-        private void _InitMotors()
-        {
-            Motors = new ObservableCollection<Motor>();
-            Motor = new Motor();
-            for (int i = 0; i < 3; i++)
-            {
-                Motor.Speed = 2;
-                AddMotor();
-            }
+            AddAxis(ZAxis);
         }
 
-        private void _InitdrawableObjects()
+        private void InitPlates()
         {
-            XAxisX = 200;
-            XAxisY = 350;
-            XAxisWidth = 500;
-            XAxisHeight = 10;
+            Plates = [];
+            MainPlate = new Plate();
+            MainPlate.Width = MainPlate.Height = 100;
+            MainPlate.X = (ZAxis.X - (MainPlate.Width / 2)) + ZAxis.Width / 2;
+            MainPlate.Y = (ZAxis.Y - (MainPlate.Height / 2)) + ZAxis.Height / 2;
+            AddPlate(MainPlate);
+        }
 
-            YAxisX = 200;
-            YAxisY = 100;
-            YAxisWidth = 10;
-            YAxisHeight = 500;
+        private void InitMotors()
+        {
+            Motors = [];
+            XMotor = new Motor
+            {
+                Speed = 10
+            };
 
-            ZAxisX = 200;
-            ZAxisY = 100;
-            ZAxisWidth = 10;
-            ZAxisHeight = 10;
+            AddMotor(XMotor);
+            YMotor = new Motor
+            {
+                Speed = 10
+            };
 
-            PlateWidth = 100;
-            PlateHeight = 100;
-            PlateX = 200 - PlateWidth / 2 + ZAxisWidth / 2;
-            PlateY = 100 - PlateHeight / 2 + ZAxisHeight / 2;
+            AddMotor(YMotor);
+            ZMotor = new Motor
+            {
+                Speed = 10
+            };
+            AddMotor(ZMotor);
         }
 
         #endregion Private Methods
 
-        public ICommand MouseDownCommand { get;  set; }
-
+        #region ICommand Methods
         private void ExecuteMouseDown(object obj)
         {
-            if(obj != null && obj is Canvas canvas)
+            if (obj != null && obj is Canvas canvas)
             {
                 System.Windows.Point clickPoint = Mouse.GetPosition(canvas);
+                var (_x,_y) = TargetPointValidation(clickPoint);
+                var (xDist, yDist) = CalculateDistance(MainPlate, _x, _y);
+                MoveAxis(xDist, yDist);
             }
         }
 
-    }
-
-    public class RelayCommand : ICommand
-    {
-        private Action<object> execute;
-
-        public RelayCommand(Action<object> execute)
+        private (double x, double y) GetMaxSize(object obj)
         {
-            this.execute = execute;
+            if (obj != null)
+            {
+                if (obj is Axis axis)
+                {
+                    return ((axis.X + axis.Width)-ZAxis.Width / 2, (axis.Y + axis.Height) - ZAxis.Height / 2);
+                }
+                else if (obj is Plate plate)
+                {
+                    return ((plate.X + plate.Width) - ZAxis.Width / 2, (plate.Y + plate.Height) - ZAxis.Height / 2);
+                }
+            }
+            return (0, 0);
         }
 
-        public bool CanExecute(object parameter)
+        private (double X, double Y) TargetPointValidation(System.Windows.Point clickPoint)
         {
-            return true;
+            double clickX = clickPoint.X;
+            double clickY = clickPoint.Y;
+
+            if (clickX < XAxis.X + ZAxis.Width / 2)
+            {
+                clickX = XAxis.X + ZAxis.Width / 2;
+            }
+            else if(clickX > XAxis.X + XAxis.Width - (ZAxis.Width / 2))
+            {
+                clickX = XAxis.X + XAxis.Width - (ZAxis.Width / 2);
+            }
+
+            if (clickY < YAxis.Y + ZAxis.Height / 2)
+            {
+                clickY = YAxis.Y + ZAxis.Height / 2;
+            }
+            else if (clickY > YAxis.Y + YAxis.Height - (ZAxis.Height / 2))
+            {
+                clickY = YAxis.Y + YAxis.Height - (ZAxis.Height / 2);
+            }
+
+            return (clickX, clickY);
         }
 
-        public event EventHandler CanExecuteChanged;
-
-        public void Execute(object parameter)
+        private (double X, double Y) CalculateDistance(Plate plate, double targX, double targY)
         {
-            execute(parameter);
+            double _x = targX - plate.X - plate.Width / 2;
+            double _y = targY - plate.Y - plate.Height / 2;
+            return (_x, _y);
         }
+
+        private void MoveAxis(double distanceX, double distanceY)
+        {
+            Task task = Task.Run(() =>
+            {
+                if(distanceX < 0)
+                {
+                    for (double i = distanceX; i < 0; i++)
+                    {
+                        MainPlate.X -= 1;
+                        YAxis.X -= 1;
+                        ZAxis.X -= 1;
+                        Thread.Sleep(XMotor.Speed);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < distanceX; i++)
+                    {
+                        MainPlate.X += 1;
+                        YAxis.X += 1;
+                        ZAxis.X += 1;
+                        Thread.Sleep(XMotor.Speed);
+                    }
+                }
+
+                if (distanceY < 0)
+                {
+                    for (double i = distanceY; i < 0; i++)
+                    {
+                        MainPlate.Y -= 1;
+                        ZAxis.Y -= 1;
+                        Thread.Sleep(XMotor.Speed);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < distanceY; i++)
+                    {
+                        MainPlate.Y += 1;
+                        ZAxis.Y += 1;
+                        Thread.Sleep(XMotor.Speed);
+                    }
+                }
+
+            });          
+        }
+        #endregion ICommand Methods
     }
 }
