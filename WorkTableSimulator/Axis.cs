@@ -3,6 +3,7 @@
     internal class Axis : ChangeNotifier
     {
         private AxisType _AxisName;
+        private ContentLabel _ContLabel;
         private int _MinPose;
         private int _MaxPose;
         private int _CurrPose;
@@ -11,27 +12,15 @@
         private double _Width;
         private double _Height;
 
-        //private int _YMinPose;
-        //private int _YMaxPose;
-        //private int _YCurrPose;
-        //private uint _YAxisX;
-        //private uint _YAxisY;
-        //private uint _YAxisWidth;
-        //private uint _YAxisHeight;
-
-        //private int _ZMinPose;
-        //private int _ZMaxPose;
-        //private int _ZCurrPose;
-        //private uint _ZAxisX;
-        //private uint _ZAxisY;
-        //private uint _ZAxisWidth;
-        //private uint _ZAxisHeight;
-
-        //X
+        public ContentLabel ContLabel
+        {
+            get { return _ContLabel; }
+            set { _ContLabel = value; OnPropertyChanged(nameof(ContLabel)); }
+        }
         public AxisType AxisName
         {
             get { return _AxisName; }
-            set { _AxisName = value; OnPropertyChanged(nameof(AxisName)); }
+            set { _AxisName = value; OnPropertyChanged(nameof(AxisName)); ContLabel.Content = value.ToString(); }
         }
 
         public int MinPose
@@ -55,13 +44,13 @@
         public double X
         {
             get { return _X; }
-            set { _X = value; OnPropertyChanged(nameof(X)); }
+            set { ContLabel.X = _X = value; OnPropertyChanged(nameof(X)); }
         }
 
         public double Y
         {
             get { return _Y; }
-            set { _Y = value; OnPropertyChanged(nameof(Y)); }
+            set { ContLabel.Y = _Y = value; OnPropertyChanged(nameof(Y)); }
         }
 
         public double Width
@@ -76,7 +65,7 @@
             set { _Height = value; OnPropertyChanged(nameof(Height)); }
         }
 
-        public Axis() { }
+        public Axis() { ContLabel = new ContentLabel(); }
 
 
     }

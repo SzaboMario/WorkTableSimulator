@@ -15,6 +15,7 @@ namespace WorkTableSimulator
         private Motor _YMotor;
         private Motor _ZMotor;
         private Plate _MainPlate;
+        private OperationMode _OpMode;
 
         private ObservableCollection<Axis> _Axes;
         private ObservableCollection<Plate> _Plates;
@@ -72,6 +73,7 @@ namespace WorkTableSimulator
             InitPlates();
             InitMotors();
             MouseDownCommand = new RelayCommand(ExecuteMouseDown);
+            _OpMode = OperationMode.Idle;
         }
         #endregion Constructor
 
@@ -100,15 +102,16 @@ namespace WorkTableSimulator
             Axes = [];
             XAxis = new Axis
             {
-                AxisName = AxisType.X,
+                AxisName = AxisType.X,             
                 X = 200,
                 Y = 350,
                 Width = 500,
                 Height = 10,
                 MinPose = 0,
                 MaxPose = 100,
-                CurrPose = 0
+                CurrPose = 0,
             };
+
             AddAxis(XAxis);
 
             YAxis = new Axis
@@ -120,8 +123,9 @@ namespace WorkTableSimulator
                 Height = 500,
                 MinPose = 0,
                 MaxPose = 100,
-                CurrPose = 0
+                CurrPose = 0,
             };
+
             AddAxis(YAxis);
 
             ZAxis = new Axis
@@ -133,8 +137,9 @@ namespace WorkTableSimulator
                 Height = 10,
                 MinPose = 0,
                 MaxPose = 100,
-                CurrPose = 0
+                CurrPose = 0,
             };
+
             AddAxis(ZAxis);
         }
 
@@ -142,9 +147,11 @@ namespace WorkTableSimulator
         {
             Plates = [];
             MainPlate = new Plate();
+            MainPlate.PlateName = AxisType.Plate;
             MainPlate.Width = MainPlate.Height = 100;
             MainPlate.X = (ZAxis.X - (MainPlate.Width / 2)) + ZAxis.Width / 2;
             MainPlate.Y = (ZAxis.Y - (MainPlate.Height / 2)) + ZAxis.Height / 2;
+
             AddPlate(MainPlate);
         }
 
@@ -175,13 +182,26 @@ namespace WorkTableSimulator
         #region ICommand Methods
         private void ExecuteMouseDown(object obj)
         {
-            if (obj != null && obj is Canvas canvas)
+            if (obj != null && obj is Canvas canvas && _OpMode == OperationMode.Idle)
             {
                 System.Windows.Point clickPoint = Mouse.GetPosition(canvas);
                 var (_x,_y) = TargetPointValidation(clickPoint);
                 var (xDist, yDist) = CalculateDistance(MainPlate, _x, _y);
+                //MainPlate.TargetPose = $"{xDist},{yDist}";
+                //TODO: TargetPose-t kitalálni hogyan kell kiszámolni.
+                //pl. van egy click x és y, x=124, de nekem csak 0-100 ig skálázhatom fel
+                double normalizaltX = (_x - 100) / 4;
+                double normalizaltY = (_y - 100) / 4;
+                //normalizaltX = Math.Max(0, Math.Min(normalizaltX, 100));
+                //normalizaltY = Math.Max(0, Math.Min(normalizaltY, 100));
+                MainPlate.TargetPose = $"{normalizaltX},{normalizaltY}";
                 MoveAxis(xDist, yDist);
             }
+        }
+        public double NormalizeTargetPoint(double value, double minVal, double maxVal)
+        {
+            // Az érték normalizálása 0 és 100 közé
+            return (100 * (value - minVal)) / (maxVal - minVal);
         }
 
         private (double x, double y) GetMaxSize(object obj)
@@ -237,6 +257,7 @@ namespace WorkTableSimulator
         {
             Task task = Task.Run(() =>
             {
+                _OpMode = OperationMode.Running;
                 if(distanceX < 0)
                 {
                     for (double i = distanceX; i < 0; i++)
@@ -276,7 +297,7 @@ namespace WorkTableSimulator
                         Thread.Sleep(XMotor.Speed);
                     }
                 }
-
+                _OpMode = OperationMode.Idle;
             });          
         }
         #endregion ICommand Methods

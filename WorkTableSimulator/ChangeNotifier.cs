@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel;
 
 namespace WorkTableSimulator
 {
-    internal class ChangeNotifier : INotifyPropertyChanged
+    public class ChangeNotifier : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 

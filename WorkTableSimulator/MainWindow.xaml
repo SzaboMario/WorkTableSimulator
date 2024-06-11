@@ -32,7 +32,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"></ColumnDefinition>
-            <ColumnDefinition Width="5*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel Background="#FFB2C3C5">
             <!--X Axis-->
@@ -107,6 +107,10 @@
                 <TextBlock Text="Target pose:"></TextBlock>
                 <TextBlock Text="{Binding MainPlate.TargetPose, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
             </ItemsControl>
+            <ItemsControl>
+                <TextBlock Text="Operation mode:"></TextBlock>
+                <TextBlock Text="{Binding _OpMode, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" HorizontalAlignment="Right"></TextBlock>
+            </ItemsControl>
         </StackPanel>
         <Canvas Grid.Column="1" x:Name="workZone" Canvas.Left="100" Canvas.Top="100"  Background="DarkGray">
             <i:Interaction.Triggers>
@@ -121,6 +125,10 @@
             <Rectangle x:Name="yAxis" Fill="Green"  Canvas.Left="{Binding YAxis.X}" Canvas.Top="{Binding YAxis.Y}" Width="{Binding YAxis.Width}" Height="{Binding YAxis.Height}" ></Rectangle>
             <Rectangle x:Name="zAxis" Fill="Blue"   Canvas.Left="{Binding ZAxis.X}" Canvas.Top="{Binding ZAxis.Y}" Width="{Binding ZAxis.Width}" Height="{Binding ZAxis.Height}" ></Rectangle>
             <Rectangle x:Name="plate" Fill="Black"  Canvas.Left="{Binding MainPlate.X}" Canvas.Top="{Binding MainPlate.Y}" Width="{Binding MainPlate.Width}" Height="{Binding MainPlate.Height}" ></Rectangle>
+            <Label x:Name="lblXAxis" Content="X Axis" Canvas.Left="{Binding XAxis.ContLabel.X}" Canvas.Top="{Binding XAxis.ContLabel.Y}"></Label>
+            <Label x:Name="lblYAxis" Content="Y Axis" Canvas.Left="{Binding YAxis.ContLabel.X}" Canvas.Top="{Binding YAxis.ContLabel.Y}"></Label>
+            <Label x:Name="lblZAxis" Content="Z Axis" Canvas.Left="{Binding ZAxis.ContLabel.X}" Canvas.Top="{Binding ZAxis.ContLabel.Y}"></Label>
+            <Label x:Name="lblPlate" Content="Plate"  Canvas.Left="{Binding MainPlate.ContLabel.X}" Canvas.Top="{Binding MainPlate.ContLabel.Y}"></Label>
         </Canvas>
     </Grid>
 </Window>
