@@ -229,9 +229,12 @@ namespace WorkTableSimulator
                         }
                         break;
                     case "YM":
-                        ZAxis.Y -= 1;
-                        MainPlate.Y -= 1;
-                        YAxis.CurrPose = (int)AxisPoseScale(ZAxis);
+                        if (ZAxis.Y > YAxis.Y)
+                        {
+                            ZAxis.Y -= 1;
+                            MainPlate.Y -= 1;
+                            YAxis.CurrPose = (int)AxisPoseScale(ZAxis);
+                        }       
                         break;
                     case "ZP":
                        //TODO: plate terület csökkentéssel/nőveléssel érzékeltessem a távolságot?

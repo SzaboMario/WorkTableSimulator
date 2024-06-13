@@ -109,12 +109,12 @@
             </ItemsControl>
             <!--MainualControl-->
             <StackPanel Orientation="Horizontal" Margin="5">
-                <Button x:Name="XPlus" Content="X+" Width="30" Margin="5" Command="{Binding ExecuteMoveCommand}" CommandParameter="XP"></Button>
                 <Button x:Name="XMinus" Content="X-" Width="30" Margin="5" Command="{Binding ExecuteMoveCommand}" CommandParameter="XM"></Button>
-                <Button x:Name="YPlus" Content="Y+" Width="30" Margin="5" Command="{Binding ExecuteMoveCommand}" CommandParameter="YP"></Button>
+                <Button x:Name="XPlus" Content="X+" Width="30" Margin="5" Command="{Binding ExecuteMoveCommand}" CommandParameter="XP"></Button>
                 <Button x:Name="YMinus" Content="Y-" Width="30" Margin="5" Command="{Binding ExecuteMoveCommand}" CommandParameter="YM"></Button>
-                <Button x:Name="ZPlus" Content="Z+" Width="30" Margin="5" Command="{Binding ExecuteMoveCommand}" CommandParameter="ZP"></Button>
+                <Button x:Name="YPlus" Content="Y+" Width="30" Margin="5" Command="{Binding ExecuteMoveCommand}" CommandParameter="YP"></Button>
                 <Button x:Name="ZMinus" Content="Z-" Width="30" Margin="5" Command="{Binding ExecuteMoveCommand}" CommandParameter="ZM"></Button>
+                <Button x:Name="ZPlus" Content="Z+" Width="30" Margin="5" Command="{Binding ExecuteMoveCommand}" CommandParameter="ZP"></Button>
             </StackPanel>
         </StackPanel>
         <Canvas Grid.Column="1" x:Name="workZone" Canvas.Left="100" Canvas.Top="100"  Background="DarkGray">
