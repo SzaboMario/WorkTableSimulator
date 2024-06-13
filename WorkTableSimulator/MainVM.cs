@@ -1,6 +1,7 @@
 ﻿using System.Collections.ObjectModel;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Xps;
 
 
 namespace WorkTableSimulator
@@ -23,6 +24,11 @@ namespace WorkTableSimulator
         #endregion Fields
 
         #region Properties
+        public OperationMode OpMode
+        {
+            get { return _OpMode; }
+            set { _OpMode = value; OnPropertyChanged(nameof(OpMode)); }
+        }
         public Axis XAxis
         {
             get { return _XAxis; }
@@ -60,6 +66,8 @@ namespace WorkTableSimulator
         }
 
         public ICommand MouseDownCommand { get; set; }
+        public ICommand ExecuteMoveCommand { get; set; }
+
 
         public ObservableCollection<Axis> Axes { get => _Axes; set => _Axes = value; }       
         public ObservableCollection<Plate> Plates { get => _Plates; set => _Plates = value; }    
@@ -73,7 +81,8 @@ namespace WorkTableSimulator
             InitPlates();
             InitMotors();
             MouseDownCommand = new RelayCommand(ExecuteMouseDown);
-            _OpMode = OperationMode.Idle;
+            ExecuteMoveCommand = new RelayCommand(ExecuteMove);
+            OpMode = OperationMode.Idle;
         }
         #endregion Constructor
 
@@ -151,7 +160,6 @@ namespace WorkTableSimulator
             MainPlate.Width = MainPlate.Height = 100;
             MainPlate.X = (ZAxis.X - (MainPlate.Width / 2)) + ZAxis.Width / 2;
             MainPlate.Y = (ZAxis.Y - (MainPlate.Height / 2)) + ZAxis.Height / 2;
-
             AddPlate(MainPlate);
         }
 
@@ -177,47 +185,80 @@ namespace WorkTableSimulator
             AddMotor(ZMotor);
         }
 
-        #endregion Private Methods
-
-        #region ICommand Methods
-        private void ExecuteMouseDown(object obj)
+        private void ExecuteMouseDown(object obj)   
         {
-            if (obj != null && obj is Canvas canvas && _OpMode == OperationMode.Idle)
+            if (obj != null && obj is Canvas canvas && OpMode == OperationMode.Idle)
             {
                 System.Windows.Point clickPoint = Mouse.GetPosition(canvas);
                 var (_x,_y) = TargetPointValidation(clickPoint);
                 var (xDist, yDist) = CalculateDistance(MainPlate, _x, _y);
-                //MainPlate.TargetPose = $"{xDist},{yDist}";
-                //TODO: TargetPose-t kitalálni hogyan kell kiszámolni.
-                //pl. van egy click x és y, x=124, de nekem csak 0-100 ig skálázhatom fel
-                double normalizaltX = (_x - 100) / 4;
-                double normalizaltY = (_y - 100) / 4;
-                //normalizaltX = Math.Max(0, Math.Min(normalizaltX, 100));
-                //normalizaltY = Math.Max(0, Math.Min(normalizaltY, 100));
-                MainPlate.TargetPose = $"{normalizaltX},{normalizaltY}";
                 MoveAxis(xDist, yDist);
             }
         }
-        public double NormalizeTargetPoint(double value, double minVal, double maxVal)
-        {
-            // Az érték normalizálása 0 és 100 közé
-            return (100 * (value - minVal)) / (maxVal - minVal);
-        }
 
-        private (double x, double y) GetMaxSize(object obj)
+        private void ExecuteMove( object obj)
         {
-            if (obj != null)
+            if (OpMode == OperationMode.Idle && obj != null && obj is string param)
             {
-                if (obj is Axis axis)
+                switch (param)
                 {
-                    return ((axis.X + axis.Width)-ZAxis.Width / 2, (axis.Y + axis.Height) - ZAxis.Height / 2);
-                }
-                else if (obj is Plate plate)
-                {
-                    return ((plate.X + plate.Width) - ZAxis.Width / 2, (plate.Y + plate.Height) - ZAxis.Height / 2);
+                    case "XP":
+                        if (ZAxis.X + ZAxis.Width < XAxis.X + XAxis.Width)
+                        {
+                            ZAxis.X += 1;
+                            YAxis.X += 1;
+                            MainPlate.X += 1;
+                            XAxis.CurrPose = (int)AxisPoseScale(XAxis);
+                        }
+                        break;
+                    case "XM":
+                        if (ZAxis.X > XAxis.X)
+                        {
+                            ZAxis.X -= 1;
+                            YAxis.X -= 1;
+                            MainPlate.X -= 1;
+                            XAxis.CurrPose = (int)AxisPoseScale(XAxis);
+                        }
+                        break;
+                    case "YP":
+                        if (ZAxis.Y + ZAxis.Height < YAxis.Y + YAxis.Height)
+                        {
+                            ZAxis.Y += 1;
+                            MainPlate.Y += 1;
+                            YAxis.CurrPose = (int)AxisPoseScale(ZAxis);
+                        }
+                        break;
+                    case "YM":
+                        ZAxis.Y -= 1;
+                        MainPlate.Y -= 1;
+                        YAxis.CurrPose = (int)AxisPoseScale(ZAxis);
+                        break;
+                    case "ZP":
+                       //TODO: plate terület csökkentéssel/nőveléssel érzékeltessem a távolságot?
+                        break;
+                    case "ZM":
+                        
+                        break;
+
                 }
             }
-            return (0, 0);
+        }
+
+
+        public double AxisPoseScale(Axis axis)
+        {
+            double retDistance = 0;
+            switch (axis.AxisName)
+            {
+                case AxisType.X:
+                    retDistance = axis.X - YAxis.X;
+                    break;
+                case AxisType.Z:
+                    retDistance = axis.Y - YAxis.Y;
+                    break;
+            }
+            if (retDistance < 0) retDistance *= -1;
+            return retDistance;
         }
 
         private (double X, double Y) TargetPointValidation(System.Windows.Point clickPoint)
@@ -253,11 +294,12 @@ namespace WorkTableSimulator
             return (_x, _y);
         }
 
+
         private void MoveAxis(double distanceX, double distanceY)
         {
             Task task = Task.Run(() =>
             {
-                _OpMode = OperationMode.Running;
+                OpMode = OperationMode.Running;
                 if(distanceX < 0)
                 {
                     for (double i = distanceX; i < 0; i++)
@@ -265,6 +307,7 @@ namespace WorkTableSimulator
                         MainPlate.X -= 1;
                         YAxis.X -= 1;
                         ZAxis.X -= 1;
+                        XAxis.CurrPose = (int)AxisPoseScale(XAxis);
                         Thread.Sleep(XMotor.Speed);
                     }
                 }
@@ -275,6 +318,7 @@ namespace WorkTableSimulator
                         MainPlate.X += 1;
                         YAxis.X += 1;
                         ZAxis.X += 1;
+                        XAxis.CurrPose = (int)AxisPoseScale(XAxis);
                         Thread.Sleep(XMotor.Speed);
                     }
                 }
@@ -285,7 +329,8 @@ namespace WorkTableSimulator
                     {
                         MainPlate.Y -= 1;
                         ZAxis.Y -= 1;
-                        Thread.Sleep(XMotor.Speed);
+                        YAxis.CurrPose = (int)AxisPoseScale(ZAxis);
+                        Thread.Sleep(YMotor.Speed);
                     }
                 }
                 else
@@ -294,12 +339,13 @@ namespace WorkTableSimulator
                     {
                         MainPlate.Y += 1;
                         ZAxis.Y += 1;
-                        Thread.Sleep(XMotor.Speed);
+                        YAxis.CurrPose = (int)AxisPoseScale(ZAxis);
+                        Thread.Sleep(YMotor.Speed);
                     }
                 }
-                _OpMode = OperationMode.Idle;
+                OpMode = OperationMode.Idle;
             });          
         }
-        #endregion ICommand Methods
+        #endregion Private Methods
     }
 }

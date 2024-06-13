@@ -6,7 +6,7 @@
         private ContentLabel _ContLabel;
         private int _MinPose;
         private int _MaxPose;
-        private int _CurrPose;
+        private double _CurrPose;
         private double _X;
         private double _Y;
         private double _Width;
@@ -35,7 +35,7 @@
             set { _MaxPose = value; OnPropertyChanged(nameof(MaxPose)); }
         }
         
-        public int CurrPose
+        public double CurrPose
         {
             get { return _CurrPose; }
             set { _CurrPose = value; OnPropertyChanged(nameof(CurrPose)); }
